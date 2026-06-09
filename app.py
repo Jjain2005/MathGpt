@@ -1,16 +1,16 @@
 import streamlit as st
 
 from langchain_groq import ChatGroq
-from langchain.agents import Tool, initialize_agent
-from langchain.agents.agent_types import AgentType
+
+from langchain.tools import Tool
+from langchain.agents import initialize_agent, AgentType
+
 from langchain.prompts import PromptTemplate
 from langchain.chains import LLMChain
 from langchain_community.utilities import WikipediaAPIWrapper
 from langchain.callbacks import StreamlitCallbackHandler
 
-# -------------------------
-# STREAMLIT CONFIG
-# -------------------------
+
 
 st.set_page_config(
     page_title="Math & Research Assistant",
@@ -28,18 +28,14 @@ if not groq_api_key:
     st.info("Please enter your GROQ API key.")
     st.stop()
 
-# -------------------------
-# LLM
-# -------------------------
+
 
 llm = ChatGroq(
     groq_api_key=groq_api_key,
     model_name="llama-3.3-70b-versatile"
 )
 
-# -------------------------
-# WIKIPEDIA TOOL
-# -------------------------
+
 
 wiki = WikipediaAPIWrapper()
 
@@ -52,9 +48,7 @@ wikipedia_tool = Tool(
     """
 )
 
-# -------------------------
-# CUSTOM CALCULATOR TOOL
-# -------------------------
+
 
 def calculator_tool(expression: str):
     try:
@@ -114,9 +108,6 @@ reasoning_tool = Tool(
     """
 )
 
-# -------------------------
-# AGENT
-# -------------------------
 
 assistant_agent = initialize_agent(
     tools=[
@@ -130,9 +121,6 @@ assistant_agent = initialize_agent(
     handle_parsing_errors=True
 )
 
-# -------------------------
-# CHAT HISTORY
-# -------------------------
 
 if "messages" not in st.session_state:
     st.session_state.messages = [
@@ -147,18 +135,13 @@ for message in st.session_state.messages:
         message["content"]
     )
 
-# -------------------------
-# INPUT
-# -------------------------
+
 
 question = st.text_area(
     "Enter your question:",
     placeholder="What is 25% of 500?"
 )
 
-# -------------------------
-# RUN
-# -------------------------
 
 if st.button("Find My Answer"):
 
