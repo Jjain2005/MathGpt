@@ -1,14 +1,11 @@
 import streamlit as st
-
 from langchain_groq import ChatGroq
-
-from langchain.tools import Tool
+from langchain_core.tools import Tool
 from langchain.agents import initialize_agent, AgentType
-
 from langchain.prompts import PromptTemplate
 from langchain.chains import LLMChain
 from langchain_community.utilities import WikipediaAPIWrapper
-from langchain.callbacks import StreamlitCallbackHandler
+from langchain_community.callbacks import StreamlitCallbackHandler
 
 
 
